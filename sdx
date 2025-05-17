@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDX Signals</title>
+    <link rel="icon" href="https://i.postimg.cc/vmT75GH6/photo-2025-05-07-04-23-55.jpg" type="image/png">
+    <style>
+        :root {
+            --rgb-color-1: 0, 255, 0;
+            --rgb-color-2: 0, 200, 255;
+            --rgb-color-3: 100, 0, 255;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            display: none;
+            position: relative;
+        }
+        .password-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3),
+                        0 0 40px rgba(var(--rgb-color-1), 0.1),
+                        0 0 60px rgba(var(--rgb-color-2), 0.05);
+            text-align: center;
+            width: 350px;
+            z-index: 100;
+            animation: borderGlow 8s infinite alternate;
+        }
+        @keyframes borderGlow {
+            0% {
+                border-color: rgba(var(--rgb-color-1), 1);
+                box-shadow: 0 0 20px rgba(var(--rgb-color-1), 0.3),
+                            0 0 40px rgba(var(--rgb-color-1), 0.1),
+                            0 0 60px rgba(var(--rgb-color-1), 0.05);
+            }
+            50% {
+                border-color: rgba(var(--rgb-color-2), 1);
+                box-shadow: 0 0 20px rgba(var(--rgb-color-2), 0.3),
+                            0 0 40px rgba(var(--rgb-color-2), 0.1),
+                            0 0 60px rgba(var(--rgb-color-2), 0.05);
+            }
+            100% {
+                border-color: rgba(var(--rgb-color-3), 1);
+                box-shadow: 0 0 20px rgba(var(--rgb-color-3), 0.3),
+                            0 0 40px rgba(var(--rgb-color-3), 0.1),
+                            0 0 60px rgba(var(--rgb-color-3), 0.05);
+            }
+        }
+        .password-container h2 {
+            margin-top: 0;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(var(--rgb-color-1), 0.5);
+        }
+        .password-container p {
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        .password-container input {
+            padding: 12px;
+            width: 80%;
+            margin-bottom: 15px;
+            background-color: #222;
+            border: 1px solid #00ff00;
+            color: white;
+            border-radius: 5px;
+            font-family: monospace;
+            transition: all 0.3s;
+        }
+        .password-container input:focus {
+            outline: none;
+            border-color: rgba(var(--rgb-color-2), 1);
+            box-shadow: 0 0 10px rgba(var(--rgb-color-2), 0.5);
+        }
+        .password-container button {
+            padding: 12px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .password-container button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0) 45%,
+                rgba(255,255,255,0.5) 50%,
+                rgba(255,255,255,0) 55%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        .password-container button:hover {
+            background-color: #218838;
+            box-shadow: 0 0 15px rgba(var(--rgb-color-1), 0.5);
+        }
+        .quick-login-btn {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        .quick-login-btn:hover {
+            background-color: #0069d9;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+        }
+        .telegram-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #0088cc;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .telegram-link:hover {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .telegram-link img {
+            width: 24px;
+            margin-right: 10px;
+        }
+        h1, h3 {
+            color: #00ff00;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(var(--rgb-color-1), 0.3);
+            position: relative;
+        }
+        h1::after, h3::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                rgba(var(--rgb-color-1), 0.8), 
+                rgba(var(--rgb-color-2), 0.8), 
+                rgba(var(--rgb-color-3), 0.8));
+            animation: rainbowBorder 8s linear infinite;
+            background-size: 200% 100%;
+        }
+        @keyframes rainbowBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        a {
+            color: cyan;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        a:hover {
+            color: #00ffff;
+            text-decoration: underline;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        select, input {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #222;
+            color: white;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: rgba(var(--rgb-color-2), 1);
+            box-shadow: 0 0 10px rgba(var(--rgb-color-2), 0.5);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+            box-shadow: 0 0 15px rgba(var(--rgb-color-1), 0.5);
+        }
+        .button-container {
+            display: flex;
+            justify-content: start;
+            flex-wrap: wrap;
+        }
+        .error-message {
+            color: red;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+        .animation-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5),
+                        0 0 40px rgba(var(--rgb-color-1), 0.3);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5),
+                            0 0 40px rgba(var(--rgb-color-1), 0.3); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8),
+                            0 0 60px rgba(var(--rgb-color-1), 0.5); }
+            100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5),
+                            0 0 40px rgba(var(--rgb-color-1), 0.3); }
+        }
+        .signal-item {
+            padding: 8px 0;
+            margin: 3px 0;
+            font-family: monospace;
+            white-space: pre;
+            font-size: 14px;
+            position: relative;
+            padding-left: 15px;
+        }
+        .signal-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .signal-call {
+            color: #00ff00;
+        }
+        .signal-call::before {
+            background-color: #00ff00;
+            box-shadow: 0 0 5px #00ff00,
+                        0 0 10px rgba(var(--rgb-color-1), 0.5);
+        }
+        .signal-put {
+            color: #ff5555;
+        }
+        .signal-put::before {
+            background-color: #ff5555;
+            box-shadow: 0 0 5px #ff5555,
+                        0 0 10px rgba(255, 85, 85, 0.5);
+        }
+        .download-btn {
+            background-color: #007bff;
+            margin: 20px 0;
+        }
+        .download-btn:hover {
+            background-color: #0069d9;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+        }
+        .telegram-btn {
+            background-color: #0088cc;
+        }
+        .telegram-btn:hover {
+            background-color: #0077b6;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.5);
+        }
+        #current-date, #current-time {
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(var(--rgb-color-1), 0.5);
+        }
+        .timeframe-option {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(var(--rgb-color-1), 0.8), 
+                transparent);
+            animation: logoGlow 3s infinite;
+        }
+        @keyframes logoGlow {
+            0% { opacity: 0.3; width: 60%; }
+            50% { opacity: 1; width: 80%; }
+            100% { opacity: 0.3; width: 60%; }
+        }
+        .logo img {
+            height: 60px;
+            filter: drop-shadow(0 0 5px rgba(var(--rgb-color-1), 0.5));
+        }
+        .paid-notice {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #ffcc00;
+            position: relative;
+            overflow: hidden;
+        }
+        .paid-notice::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 204, 0, 0) 0%,
+                rgba(255, 204, 0, 0.1) 50%,
+                rgba(255, 204, 0, 0) 100%
+            );
+            animation: noticeShine 3s infinite;
+        }
+        @keyframes noticeShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .rgb-light {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: moveLight 15s infinite alternate;
+        }
+        .rgb-light-1 {
+            background: radial-gradient(circle, rgba(var(--rgb-color-1), 1), transparent 70%);
+            top: 20%;
+            left: 10%;
+        }
+        .rgb-light-2 {
+            background: radial-gradient(circle, rgba(var(--rgb-color-2), 1), transparent 70%);
+            bottom: 10%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+        .rgb-light-3 {
+            background: radial-gradient(circle, rgba(var(--rgb-color-3), 1), transparent 70%);
+            top: 50%;
+            right: 30%;
+            animation-delay: 6s;
+        }
+        @keyframes moveLight {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(50px, 50px); }
+            50% { transform: translate(-30px, 80px); }
+            75% { transform: translate(80px, -30px); }
+            100% { transform: translate(-50px, -50px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- RGB Background Lights -->
+    <div class="rgb-light rgb-light-1"></div>
+    <div class="rgb-light rgb-light-2"></div>
+    <div class="rgb-light rgb-light-3"></div>
+
+    <div class="password-container" id="password-container">
+        <div class="logo">
+            <img src="https://i.postimg.cc/vmT75GH6/photo-2025-05-07-04-23-55.jpg" alt="SDX Signals Logo">
+        </div>
+        <h2>SDX Signals Generator</h2>
+        
+        <div class="paid-notice">
+            <p><strong>This is a PAID bot service.</strong> To purchase full access, please contact us on Telegram.</p>
+            <p>Telegram: <a href="https://t.me/trader_shourov" target="_blank">@trader_shourov</a></p>
+        </div>
+
+        <div id="password-form">
+            <p>Password required to access the signal generator</p>
+            <input type="password" id="password-input" placeholder="Enter password">
+            <button id="submit-password">Submit</button>
+            <p id="password-error" style="color: red; display: none;">Incorrect password. Please try again.</p>
+        </div>
+        
+        <button id="quick-login-btn" class="quick-login-btn" style="display: none;">Login</button>
+        
+        <a href="https://t.me/trader_shourov" target="_blank" class="telegram-link">
+            <img src="https://telegram.org/img/t_logo.png" alt="Telegram">
+            Contact Telegram Channel for Buy Password
+        </a>
+    </div>
+
+    <div class="container" id="main-container">
+        <div class="logo">
+            <img src="https://i.postimg.cc/vmT75GH6/photo-2025-05-07-04-23-55.jpg" alt="SDX Signals Logo">
+        </div>
+        <h1>SDX Signals REAL-TIME SIGNAL GENERATOR</h1>
+        <p id="timezone-info">Timezone: Asia/Dhaka | Date: <span id="current-date"></span> | Time: <span id="current-time"></span></p>
+        <a href="https://t.me/trader_shourov" target="_blank" rel="noopener noreferrer">SDX Signals Official</a>
+        
+        <h3>Available Assets:</h3>
+        <select id="asset-select">
+            <option value="">Select an asset</option>
+        </select>
+
+        <h3>Time Frame:</h3>
+        <select id="timeframe-select">
+            <option value="1" selected>01:00 minutes</option>
+            <option value="2">02:00 minutes</option>
+            <option value="5">05:00 minutes</option>
+            <option value="10">10:00 minutes</option>
+            <option value="15">15:00 minutes</option>
+            <option value="30">30:00 minutes</option>
+            <option value="60">01:00:00 hours</option>
+            <option value="120">02:00:00 hours</option>
+            <option value="240">04:00:00 hours</option>
+        </select>
+
+        <h3>Number of Signals to Generate:</h3>
+        <input type="number" id="signal-count" value="10" min="1" />
+
+        <h3>Filter Signals:</h3>
+        <select id="filter-select">
+            <option value="ALL">All</option>
+            <option value="CALL">CALL</option>
+            <option value="PUT">PUT</option>
+        </select>
+
+        <div class="button-container">
+            <button id="generate-signals">Generate Signals</button>
+            <button id="reset-signals">Reset Signals</button>
+            <button class="telegram-btn" onclick="window.open('https://t.me/trader_shourov', '_blank')">Join Telegram</button>
+        </div>
+
+        <p id="error-message" class="error-message"></p>
+        
+        <h3>Generated Signals:</h3>
+        <div id="signal-list"></div>
+        <button class="download-btn" id="download-signals">Download Signals (TXT)</button>
+        
+        <div id="animation-message" class="animation-message">
+            <h3>New Signals Generated!</h3>
+        </div>
+    </div>
+
+    <script>
+        // Password is hardcoded and can only be changed in the code
+        const CORRECT_PASSWORD = "DH23N@ud";
+        const STORAGE_KEY = "sdx_signal_auth";
+        
+        let signals = [];
+        let existingSignals = new Set();
+        
+        const availableAssets = [
+            "AUD/CAD (OTC)", "AUD/CHF (OTC)", "AUD/JPY (OTC)", "AUD/NZD (OTC)", "AUD/USD (OTC)",
+            "CAD/CHF (OTC)", "CHF/JPY (OTC)", "EUR/AUD (OTC)", "EUR/CAD (OTC)", "EUR/CHF (OTC)",
+            "EUR/GBP (OTC)", "EUR/USD (OTC)", "GBP/AUD (OTC)", "GBP/CAD (OTC)", "GBP/CHF (OTC)",
+            "GBP/JPY (OTC)", "GBP/NZD (OTC)", "GBP/USD (OTC)", "NZD/CAD (OTC)", "NZD/CHF (OTC)",
+            "NZD/JPY (OTC)", "USD/BDT (OTC)", "USD/BRL (OTC)", "USD/CAD (OTC)", "USD/CHF (OTC)",
+            "USD/COP (OTC)", "USD/DZD (OTC)", "USD/INR (OTC)", "USD/JPY (OTC)", "USD/NGN (OTC)",
+            "USD/PKR (OTC)", "USD/SGD (OTC)", "USD/TRY (OTC)", "USD/ZAR (OTC)", "Bitcoin (OTC)",
+            "Gold (OTC)", "Silver (OTC)", "USCrude (OTC)", "UKBrent (OTC)"
+        ];
+
+        // Check authentication status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const isAuthenticated = localStorage.getItem(STORAGE_KEY) === 'true';
+            
+            if (isAuthenticated) {
+                // Show quick login option
+                document.getElementById('password-form').style.display = 'none';
+                document.getElementById('quick-login-btn').style.display = 'block';
+            }
+            
+            // Populate assets dropdown
+            const assetSelect = document.getElementById('asset-select');
+            availableAssets.forEach(asset => {
+                const option = document.createElement('option');
+                option.value = asset;
+                option.textContent = asset;
+                assetSelect.appendChild(option);
+            });
+            
+            // Update time every second
+            setInterval(updateDateTime, 1000);
+            updateDateTime();
+        });
+
+        // Password login
+        document.getElementById('submit-password').addEventListener('click', function() {
+            const enteredPassword = document.getElementById('password-input').value;
+            const errorElement = document.getElementById('password-error');
+            
+            if (enteredPassword === CORRECT_PASSWORD) {
+                // Save authentication state
+                localStorage.setItem(STORAGE_KEY, 'true');
+                showMainApp();
+            } else {
+                errorElement.style.display = 'block';
+            }
+        });
+
+        // Quick login button
+        document.getElementById('quick-login-btn').addEventListener('click', function() {
+            showMainApp();
+        });
+
+        function showMainApp() {
+            document.getElementById('password-container').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+        }
+
+        // Handle Enter key in password field
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('submit-password').click();
+            }
+        });
+
+        function formatTime(date) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function generateSignal(asset, time, timeframe) {
+            const direction = Math.random() < 0.5 ? 'CALL' : 'PUT';
+            const timeframeText = timeframe < 60 ? 
+                `${timeframe.toString().padStart(2, '0')}Min` : 
+                `${(timeframe/60).toString().padStart(2, '0')}Hour`;
+            
+            return {
+                asset,
+                time,
+                direction,
+                timeframe: timeframeText
+            };
+        }
+
+        function generateRandomInterval() {
+            return Math.floor(Math.random() * 8) + 1;
+        }
+
+        function generateUniqueTimes(count, timeframe) {
+            const times = [];
+            let nextTime = new Date();
+            
+            for (let i = 0; i < count; i++) {
+                const randomInterval = generateRandomInterval();
+                nextTime.setMinutes(nextTime.getMinutes() + randomInterval);
+                times.push(formatTime(nextTime));
+            }
+            
+            return times;
+        }
+
+        function handleGenerateSignals() {
+            const selectedAsset = document.getElementById('asset-select').value;
+            const signalCount = Number(document.getElementById('signal-count').value);
+            const timeframe = document.getElementById('timeframe-select').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (!selectedAsset) {
+                errorMessage.textContent = 'Please select an asset before generating signals!';
+                return;
+            }
+
+            errorMessage.textContent = '';
+            const uniqueTimes = generateUniqueTimes(signalCount, timeframe);
+            const newSignals = [];
+
+            uniqueTimes.forEach((time) => {
+                const signalKey = `${selectedAsset} | ${time}`;
+                if (!existingSignals.has(signalKey)) {
+                    const newSignal = generateSignal(selectedAsset, time, timeframe);
+                    newSignals.push(newSignal);
+                    existingSignals.add(signalKey);
+                }
+            });
+
+            signals.push(...newSignals);
+            displaySignals(newSignals);
+            showAnimation();
+        }
+
+        function displaySignals(newSignals) {
+            const signalList = document.getElementById('signal-list');
+            newSignals.forEach(signal => {
+                const signalItem = document.createElement('div');
+                signalItem.className = 'signal-item';
+                
+                const assetPart = signal.asset.padEnd(15, ' ');
+                const timePart = signal.time.padEnd(8, ' ');
+                const directionPart = signal.direction.padEnd(10, ' ');
+                
+                signalItem.textContent = `${assetPart} ; ${timePart} ; ${directionPart}${signal.timeframe}`;
+                signalItem.classList.add(signal.direction === 'CALL' ? 'signal-call' : 'signal-put');
+                
+                signalList.appendChild(signalItem);
+            });
+        }
+
+        function downloadSignals() {
+            if (signals.length === 0) {
+                document.getElementById('error-message').textContent = 'No signals to download!';
+                return;
+            }
+
+            let content = "SDX Signals - Premium Signals\n";
+            content += "Generated on: " + new Date().toLocaleString() + "\n\n";
+            content += "==============================================\n";
+            content += "ASSET           ; TIME     ; DIRECTION  TIMEFRAME\n";
+            content += "==============================================\n";
+            
+            signals.forEach(signal => {
+                const assetPart = signal.asset.padEnd(15, ' ');
+                const timePart = signal.time.padEnd(8, ' ');
+                const directionPart = signal.direction.padEnd(10, ' ');
+                content += `${assetPart} ; ${timePart} ; ${directionPart}${signal.timeframe}\n`;
+            });
+            
+            content += "\n\nJoin our Telegram channel for more signals: https://t.me/trader_shourov";
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SDX_Signals_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function showAnimation() {
+            const animationMessage = document.getElementById('animation-message');
+            animationMessage.style.display = 'block';
+            setTimeout(() => {
+                animationMessage.style.display = 'none';
+            }, 2000);
+        }
+
+        function handleResetSignals() {
+            signals = [];
+            existingSignals = new Set();
+            document.getElementById('signal-list').innerHTML = '';
+            document.getElementById('error-message').textContent = '';
+        }
+
+        function updateDateTime() {
+            const currentDate = new Date();
+            document.getElementById('current-date').textContent = currentDate.toLocaleDateString();
+            document.getElementById('current-time').textContent = currentDate.toLocaleTimeString('en-GB');
+        }
+
+        // Event listeners
+        document.getElementById('generate-signals').addEventListener('click', handleGenerateSignals);
+        document.getElementById('reset-signals').addEventListener('click', handleResetSignals);
+        document.getElementById('download-signals').addEventListener('click', downloadSignals);
+    </script>
+</body>
+</html>
